@@ -131,3 +131,25 @@
   .lp *, .au * { animation: none !important; transition: none !important; }
   .lp-apparait { opacity: 1; transform: none; }
 }
+/* Corrections téléphone et tablette */
+.lp, .au, .lp-hero { min-height: 100vh; min-height: 100svh; }
+.lp-hero-contenu > * { min-width: 0; }
+.lp-hero h1 { font-size: clamp(30px, 4.2vw + 8px, 56px); }
+.lp-final { width: min(1000px, calc(100% - 32px)); max-width: none; }
+
+@media (max-width: 640px) {
+  .lp-nav .lp-btn { display: none; }
+  .lp-nav .lp-lien { border: 1px solid var(--bord); }
+  .lp-badge { font-size: 12px; padding: 6px 12px; }
+  .lp-hero-texte p { font-size: 16px; }
+  .lp-cta .lp-btn { flex: 1 1 100%; }
+  .lp-demo { max-width: none; }
+  .lp-flotte-a { right: 8px; top: -16px; }
+  .lp-flotte-b { left: 8px; bottom: -16px; }
+  .lp-valeur { font-size: 36px; }
+  .lp-sous { font-size: 16px; margin-bottom: 32px; }
+  .lp-fonction, .lp-etape { padding: 22px; }
+  .lp-final { padding: 40px 20px; margin-top: 72px; }
+  .lp-final .lp-btn { width: 100%; }
+  .lp-pied { padding: 40px 16px 32px; }
+}
