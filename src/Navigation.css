@@ -1,0 +1,61 @@
+/* Barre du haut (ordinateur et tablette) */
+.tb { position: sticky; top: 0; z-index: 8; padding-top: env(safe-area-inset-top, 0px); background: rgba(255, 255, 255, 0.88); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom: 1px solid #e4e7ec; }
+.tb-interieur { display: flex; align-items: center; gap: 24px; max-width: 1200px; height: 64px; margin: 0 auto; padding: 0 24px; }
+.tb-logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: #101828; white-space: nowrap; }
+.tb-logo-icone { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #4f46e5, #4338ca); color: #fff; }
+.tb-logo-icone svg { width: 20px; height: 20px; }
+
+.tb-onglets { display: flex; gap: 4px; }
+.tb-onglet { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: transparent; color: #475467; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s; }
+.tb-onglet svg { width: 20px; height: 20px; }
+.tb-onglet:hover { background: #f2f4f7; color: #101828; }
+.tb-onglet[aria-current='page'] { background: #eef0ff; color: #4338ca; }
+
+/* Compte */
+.tb-compte { position: relative; margin-left: auto; }
+.tb-compte-btn { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 4px 12px 4px 4px; border: 1px solid #e4e7ec; border-radius: 999px; background: #fff; color: #101828; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+.tb-compte-btn:hover { background: #f9fafb; border-color: #d0d5dd; }
+.tb-avatar { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #4f46e5, #0891b2); color: #fff; font-size: 13px; font-weight: 700; }
+.tb-nom { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tb-chevron { display: grid; color: #475467; transition: transform 0.2s; }
+.tb-chevron svg { width: 16px; height: 16px; }
+.tb-chevron.ouvert { transform: rotate(180deg); }
+
+.tb-panneau { position: absolute; top: calc(100% + 8px); right: 0; z-index: 9; width: 260px; padding: 8px; border: 1px solid #e4e7ec; border-radius: 16px; background: #fff; box-shadow: 0 20px 50px rgba(16, 24, 40, 0.18); animation: tb-apparait 0.18s ease both; }
+.tb-infos { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-bottom: 1px solid #e4e7ec; margin-bottom: 8px; }
+.tb-infos strong { font-size: 15px; color: #101828; }
+.tb-infos span { font-size: 13px; color: #475467; word-break: break-all; }
+.tb-sortie { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: none; color: #b42318; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+.tb-sortie svg { width: 20px; height: 20px; }
+.tb-sortie:hover { background: #fef3f2; }
+@keyframes tb-apparait { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+.tb button:focus-visible, .bb button:focus-visible { outline: 2px solid #4338ca; outline-offset: 2px; }
+
+/* Barre du bas (téléphone) */
+.bb { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 8; padding-bottom: env(safe-area-inset-bottom, 0px); background: rgba(255, 255, 255, 0.94); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid #e4e7ec; }
+.bb-liste { display: grid; grid-template-columns: repeat(2, 1fr); }
+.bb-onglet { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 64px; border: 0; background: transparent; color: #475467; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: color 0.2s; }
+.bb-onglet svg { width: 24px; height: 24px; transition: transform 0.25s; }
+.bb-onglet::before { content: ''; position: absolute; top: 0; left: 30%; right: 30%; height: 3px; border-radius: 0 0 3px 3px; background: #4338ca; transform: scaleX(0); transition: transform 0.25s; }
+.bb-onglet[aria-current='page'] { color: #4338ca; }
+.bb-onglet[aria-current='page'] svg { transform: translateY(-2px) scale(1.08); }
+.bb-onglet[aria-current='page']::before { transform: scaleX(1); }
+
+/* Tablette : le compte est réduit à son avatar */
+@media (max-width: 1023px) {
+  .tb-nom, .tb-chevron { display: none; }
+  .tb-compte-btn { padding: 4px; }
+}
+
+/* Téléphone : onglets en bas */
+@media (max-width: 640px) {
+  .tb-interieur { height: 56px; padding: 0 16px; }
+  .tb-onglets { display: none; }
+  .bb { display: block; }
+  .tb-panneau { width: min(280px, calc(100vw - 32px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tb *, .bb * { animation: none !important; transition: none !important; }
+}
