@@ -112,8 +112,8 @@ td { font-size: 15px; padding: 14px 16px; border-bottom: 1px solid #e4e7ec; whit
 .btn-sec:disabled { opacity: 0.5; cursor: default; }
 .chargement { display: grid; place-items: center; min-height: 100vh; color: #475467; }
 @media (max-width: 640px) {
-  .page { padding-bottom: 120px; }
-  .btn-ajout { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+  .page { padding-bottom: 96px; }
+  .btn-ajout { bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
 }
 /* Tailles de texte réduites sur téléphone */
 @media (max-width: 640px) {

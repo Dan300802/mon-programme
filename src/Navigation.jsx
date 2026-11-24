@@ -21,6 +21,8 @@ const ICONES = {
     </>
   ),
   chevron: <path d="M6 9l6 6 6-6" />,
+  burger: <path d="M4 7h16M4 12h16M4 17h16" />,
+  fermer: <path d="M6 6l12 12M18 6L6 18" />,
 }
 
 function Icone({ nom }) {
@@ -28,6 +30,15 @@ function Icone({ nom }) {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {ICONES[nom]}
     </svg>
+  )
+}
+
+function Logo() {
+  return (
+    <div className="tb-logo">
+      <span className="tb-logo-icone"><Icone nom="pouls" /></span>
+      Mon Programme
+    </div>
   )
 }
 
@@ -42,10 +53,14 @@ function initiales(nom, email) {
 }
 
 export default function Navigation({ vue, onChange, nom, email, onDeconnexion }) {
-  const [ouvert, setOuvert] = useState(false)
+  const [ouvert, setOuvert] = useState(false) // menu du compte (tablette, ordinateur)
+  const [menu, setMenu] = useState(false) // menu burger (téléphone)
   const zone = useRef(null)
   const declencheur = useRef(null)
+  const burger = useRef(null)
+  const fermer = useRef(null)
 
+  // Menu du compte : fermeture au clic extérieur et avec Échap
   useEffect(() => {
     if (!ouvert) return
     function clicExterieur(e) {
@@ -65,14 +80,44 @@ export default function Navigation({ vue, onChange, nom, email, onDeconnexion })
     }
   }, [ouvert])
 
+  // Menu burger : page bloquée derrière, focus sur la croix, fermeture avec Échap
+  useEffect(() => {
+    if (!menu) return
+    document.body.style.overflow = 'hidden'
+    fermer.current?.focus()
+    function touche(e) {
+      if (e.key === 'Escape') {
+        setMenu(false)
+        burger.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', touche)
+    return () => {
+      document.body.style.overflow = ''
+      document.removeEventListener('keydown', touche)
+    }
+  }, [menu])
+
+  // Si l'écran s'agrandit (rotation, redimensionnement), on ferme le burger
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 641px)')
+    const surChangement = () => {
+      if (mq.matches) setMenu(false)
+    }
+    mq.addEventListener('change', surChangement)
+    return () => mq.removeEventListener('change', surChangement)
+  }, [])
+
+  function choisir(id) {
+    onChange(id)
+    setMenu(false)
+  }
+
   return (
     <>
       <header className="tb">
         <div className="tb-interieur">
-          <div className="tb-logo">
-            <span className="tb-logo-icone"><Icone nom="pouls" /></span>
-            Mon Programme
-          </div>
+          <Logo />
 
           <nav className="tb-onglets" aria-label="Navigation principale">
             {ONGLETS.map((o) => (
@@ -115,24 +160,62 @@ export default function Navigation({ vue, onChange, nom, email, onDeconnexion })
               </div>
             )}
           </div>
+
+          <button
+            ref={burger}
+            className="bg"
+            onClick={() => setMenu(true)}
+            aria-expanded={menu}
+            aria-controls="menu-mobile"
+            aria-label="Ouvrir le menu"
+          >
+            <Icone nom="burger" />
+          </button>
         </div>
       </header>
 
-      <nav className="bb" aria-label="Navigation principale">
-        <div className="bb-liste">
+      <div className={menu ? 'dr-voile ouvert' : 'dr-voile'} onClick={() => setMenu(false)} aria-hidden="true" />
+      <aside
+        id="menu-mobile"
+        className={menu ? 'dr ouvert' : 'dr'}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu principal"
+      >
+        <div className="dr-tete">
+          <Logo />
+          <button ref={fermer} className="dr-fermer" onClick={() => setMenu(false)} aria-label="Fermer le menu">
+            <Icone nom="fermer" />
+          </button>
+        </div>
+
+        <div className="dr-compte">
+          <span className="tb-avatar">{initiales(nom, email)}</span>
+          <div>
+            <strong>{nom || 'Mon compte'}</strong>
+            <span>{email}</span>
+          </div>
+        </div>
+
+        <nav className="dr-liste" aria-label="Navigation principale">
           {ONGLETS.map((o) => (
             <button
               key={o.id}
-              className="bb-onglet"
+              className="dr-item"
               aria-current={vue === o.id ? 'page' : undefined}
-              onClick={() => onChange(o.id)}
+              onClick={() => choisir(o.id)}
             >
               <Icone nom={o.icone} />
               {o.libelle}
             </button>
           ))}
-        </div>
-      </nav>
+        </nav>
+
+        <button className="dr-sortie" onClick={onDeconnexion}>
+          <Icone nom="sortie" />
+          Se déconnecter
+        </button>
+      </aside>
     </>
   )
 }
