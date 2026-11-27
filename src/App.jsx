@@ -39,7 +39,11 @@ export default function App() {
         onDeconnexion={() => supabase.auth.signOut()}
       />
       <main className="page">
-        {vue === 'accueil' ? <Accueil prenom={prenom} /> : <Monitoring />}
+       {vue === 'accueil' ? (
+  <Accueil prenom={prenom} onMonitoring={() => changer('monitoring')} />
+) : (
+  <Monitoring />
+)}
       </main>
     </>
   )
